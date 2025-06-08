@@ -1,0 +1,10 @@
+services:
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+    networks:
+      - base_net
+networks:
+  base_net:
+    driver: bridge
