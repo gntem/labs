@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package leaderboard;
+
+option go_package = "workshop4-grpc-leaderboard/proto";
+
+service LeaderboardService {
+  rpc ListLeaderboards(ListLeaderboardsRequest) returns (ListLeaderboardsResponse) {}
+}
+
+message ListLeaderboardsRequest {
+  int32 page_size = 1;
+  int32 page_number = 2;
+}
+
+message ListLeaderboardsResponse {
+  repeated Leaderboard leaderboards = 1;
+  int32 total_count = 2;
+  int32 page_number = 3;
+}
+
+message Leaderboard {
+  string id = 1;
+  string user_id = 2;
+  string name = 3;
+  int64 score = 4;
+}
