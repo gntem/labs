@@ -1,0 +1,11 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Your GCP project ID (must be globally unique)
+project_id = "experiment01-tofu-12345"
+
+# Your GCP billing account ID (find this in GCP Console > Billing)
+billing_account_id = "XXXXXX-XXXXXX-XXXXXX"
+
+# GCP region and zone (optional, defaults are provided)
+# region = "us-central1"
+# zone = "us-central1-a"

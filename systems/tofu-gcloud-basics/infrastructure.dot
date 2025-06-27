@@ -1,0 +1,77 @@
+digraph gcp_infrastructure {
+    rankdir=TB;
+    node [shape=box, style=rounded];
+    
+    // Project
+    project [label="GCP Project\nexperiment01", shape=ellipse, color=blue, style=filled, fillcolor=lightblue];
+    
+    // APIs
+    compute_api [label="Compute Engine API", shape=hexagon, color=orange, style=filled, fillcolor=lightyellow];
+    container_api [label="Container API", shape=hexagon, color=orange, style=filled, fillcolor=lightyellow];
+    
+    // Network Components
+    vpc [label="VPC\nmain-vpc\nMTU: 1460", color=green, style=filled, fillcolor=lightgreen];
+    
+    main_subnet [label="Main Subnet\n10.0.1.0/24\nK8s Pod Range: 10.1.0.0/16\nK8s Service Range: 10.2.0.0/16", color=green, style=filled, fillcolor=lightgreen];
+    
+    private_subnet [label="Private Subnet\n10.0.2.0/24", color=green, style=filled, fillcolor=lightgreen];
+    
+    // Firewall Rules
+    fw_internal [label="Firewall: Internal\nTCP/UDP: 0-65535\nICMP\nSource: 10.0.0.0/8", shape=diamond, color=red, style=filled, fillcolor=pink];
+    
+    fw_ssh [label="Firewall: SSH\nTCP: 22\nSource: 0.0.0.0/0\nTarget: ssh-allowed", shape=diamond, color=red, style=filled, fillcolor=pink];
+    
+    // GKE Components
+    gke_cluster [label="GKE Cluster\nexperiment01-gke\nZonal\nNetwork Policy: Enabled\nWorkload Identity: Enabled", color=purple, style=filled, fillcolor=plum];
+    
+    node_pool [label="Node Pool\nmain-node-pool\n2x e2-medium\nPreemptible\nAuto-repair/upgrade", color=purple, style=filled, fillcolor=plum];
+    
+    // Service Account
+    sa [label="Service Account\ngke-service-account\nRoles:\n- logging.logWriter\n- monitoring.metricWriter\n- monitoring.viewer\n- stackdriver.resourceMetadata.writer", shape=octagon, color=brown, style=filled, fillcolor=wheat];
+    
+    // Dependencies
+    project -> compute_api;
+    project -> container_api;
+    compute_api -> container_api;
+    
+    compute_api -> vpc;
+    vpc -> main_subnet;
+    vpc -> private_subnet;
+    
+    vpc -> fw_internal;
+    vpc -> fw_ssh;
+    
+    container_api -> gke_cluster;
+    main_subnet -> gke_cluster;
+    gke_cluster -> node_pool;
+    
+    compute_api -> sa;
+    sa -> node_pool;
+    
+    // Grouping
+    subgraph cluster_network {
+        label="Network Infrastructure";
+        style=filled;
+        color=lightgrey;
+        vpc;
+        main_subnet;
+        private_subnet;
+        fw_internal;
+        fw_ssh;
+    }
+    
+    subgraph cluster_k8s {
+        label="Kubernetes Infrastructure";
+        style=filled;
+        color=lightcyan;
+        gke_cluster;
+        node_pool;
+    }
+    
+    subgraph cluster_iam {
+        label="IAM";
+        style=filled;
+        color=lightyellow;
+        sa;
+    }
+}
