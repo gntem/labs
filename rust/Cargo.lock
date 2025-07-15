@@ -737,6 +737,10 @@ name = "workshop8-macro-logger"
 version = "0.1.0"
 
 [[package]]
+name = "workshop9-builder-pattern"
+version = "0.1.0"
+
+[[package]]
 name = "zerocopy"
 version = "0.8.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"

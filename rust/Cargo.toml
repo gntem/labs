@@ -9,4 +9,5 @@ members = [
     "workshop6-iot-zeromq",
     "workshop7-tokio-state-channel",
     "workshop8-macro-logger",
+    "workshop9-builder-pattern"
 ]
