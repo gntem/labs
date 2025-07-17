@@ -1,0 +1,34 @@
+syntax = 'proto3';
+
+option go_package = "remindme/protos";
+
+message SetReminderRequest {
+  string user_id = 1;
+  string reminder_text = 2;
+  int64 reminder_time = 3;
+}
+
+message SetReminderResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message GetRemindersRequest {
+  string user_id = 1;
+}
+
+message GetRemindersResponse {
+  repeated Reminder reminders = 1;
+}
+
+message Reminder {
+  string id = 1;
+  string user_id = 2;
+  string reminder_text = 3;
+  int64 reminder_time = 4;
+}
+
+service RemindmeService {
+  rpc SetReminder(SetReminderRequest) returns (SetReminderResponse);
+  rpc GetReminders(GetRemindersRequest) returns (GetRemindersResponse);
+}
